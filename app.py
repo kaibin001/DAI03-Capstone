@@ -5,7 +5,7 @@ import pickle
 import os
 
 # Directory for data within the repository
-data_dir = 'data'
+data_dir = 'main'
 
 # Load the trained model
 model_path = os.path.join(data_dir, 'fight_model.pkl')
