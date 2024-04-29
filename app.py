@@ -4,15 +4,18 @@ import numpy as np
 import pickle
 import os
 
+# Directory for data within the repository
+data_dir = 'data'
+
 # Load the trained model
-model_path = 'fight_model.pkl'
+model_path = os.path.join(data_dir, 'fight_model.pkl')
 with open(model_path, 'rb') as file:
     model = pickle.load(file)
 
 # Load fight data and fighter names
-fight_data_path = 'new_fight_detail_full.csv'
+fight_data_path = os.path.join(data_dir, 'new_fight_detail_full.csv')
 fight_data = pd.read_csv(fight_data_path)
-file_3_data_path = 'File 3.csv'
+file_3_data_path = os.path.join(data_dir, 'File 3.csv')
 fighter_names = pd.read_csv(file_3_data_path)
 
 # Convert all columns to string to avoid serialization issues
