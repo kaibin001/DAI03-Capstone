@@ -40,6 +40,7 @@ if st.button("Predict Winner"):
         input_features = process_features(fighter1, fighter2)
         st.write(fighter1)
         st.write(fighter2)
+        st.write(input_features)
         prediction = model.predict([input_features])
         winner = "Fighter 1 Wins" if prediction == 1 else "Fighter 2 Wins"
         st.success(winner)
