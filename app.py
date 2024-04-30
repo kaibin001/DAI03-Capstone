@@ -18,6 +18,12 @@ st.title('Fight Win Predictor')
 
 # Helper function to format stats tables
 def format_stats(stats):
+    stats['Win Rate'] = float(stats['Win Rate'])
+    stats['Str. Acc.'] = float(stats['Str. Acc.'])
+    stats['Str. Def'] = float(stats['Str. Def'])
+    stats['TD Acc.'] = float(stats['TD Acc.'])
+    stats['TD Def.'] = float(stats['TD Def.'])
+
     stats['Win Rate'] = f"{stats['Win Rate']*100:.2f}%"
     stats['Str. Acc.'] = f"{stats['Str. Acc.']*100:.2f}%"
     stats['Str. Def'] = f"{stats['Str. Def']*100:.2f}%"
