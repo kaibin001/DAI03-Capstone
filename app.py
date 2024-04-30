@@ -3,7 +3,7 @@ import pandas as pd
 import pickle
 
 # Load the model and data
-model = pickle.load(open('fight_model2.pkl', 'rb'))
+model = pickle.load(open('fight_model3.pkl', 'rb'))
 fighter_details = pd.read_csv('File 3.csv')
 fight_events = pd.read_csv('new_fight_detail_full.csv')
 
