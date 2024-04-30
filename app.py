@@ -49,17 +49,28 @@ if fighter2:
 
 
 # Prediction Button
-if st.button("Predict Winner"):
-    if not fighter1 or not fighter2:
-        st.error("Please select both fighters.")
-    else:
-        # Assuming you have a function to process input features
-        input_features = process_features(fighter1, fighter2)
-        st.write(fighter1)
-        st.write(fighter2)
-        st.write(input_features)
-        prediction = model.predict([input_features])
-        winner = "Fighter 1 Wins" if prediction == 1 else "Fighter 2 Wins"
-        st.success(winner)
+# if st.button("Predict Winner"):
+#     if not fighter1 or not fighter2:
+#         st.error("Please select both fighters.")
+#     else:
+#         # Assuming you have a function to process input features
+#         input_features = process_features(fighter1, fighter2)
+#         st.write(fighter1)
+#         st.write(fighter2)
+#         st.write(input_features)
+#         prediction = model.predict([input_features])
+#         winner = "Fighter 1 Wins" if prediction == 1 else "Fighter 2 Wins"
+#         st.success(winner)
 
+input_features = process_features(fighter1, fighter2)
+st.write("Shape of the input features:", input_features.shape)  # Check the shape
+
+# Ensure input_features is two-dimensional
+if len(input_features.shape) == 3 and input_features.shape[0] == 1:
+    input_features = input_features.reshape(1, -1)
+
+st.write(fighter1, fighter2, input_features)
+prediction = model.predict(input_features)  # Make sure input_features is correctly shaped
+winner = "Fighter 1 Wins" if prediction == 1 else "Fighter 2 Wins"
+st.success(winner)
 
