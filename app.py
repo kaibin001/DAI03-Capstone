@@ -1,42 +1,50 @@
 import streamlit as st
 import pandas as pd
+import numpy as np
 import pickle
-from sklearn.preprocessing import LabelEncoder, StandardScaler
+import os
 
-# Load fighter data and model
-fighters_df = pd.read_csv('File 3.csv')
-model_path = 'fight_model.pkl'
+# Load the trained model
+home_directory = os.path.expanduser('~')
+model_path = os.path.join(home_directory, 'Downloads/Capstone/fight_model.pkl')
 with open(model_path, 'rb') as file:
     model = pickle.load(file)
 
+# Load fight data and fighter names
+fight_data_path = os.path.join(home_directory, 'Downloads/Capstone/new_fight_detail_full.csv')
+fight_data = pd.read_csv(fight_data_path)
+file_3_data_path = os.path.join(home_directory, 'Downloads/Capstone/File 3.csv')
+fighter_names = pd.read_csv(file_3_data_path)
+
+# Convert all columns to string to avoid serialization issues
+fighter_names = fighter_names.astype(str)
+fight_data = fight_data.astype(str)
+
 # App title
-st.title("UFC Fight Prediction")
+st.title('Fight Win Predictor')
 
-# Dropdown for selecting fighters
-fighter1 = st.selectbox("Fighter 1", ["Please select or type in the Fighter's name"] + sorted(fighters_df['Full Name'].unique()))
-fighter2 = st.selectbox("Fighter 2", ["Please select or type in the Fighter's name"] + sorted(fighters_df['Full Name'].unique()))
+# Weight class selection
+weight_classes = fight_data['Weight Class'].unique()
+selected_weight_class = st.selectbox('Select Weight Class', weight_classes)
 
-if fighter1 in fighters_df['Full Name'].values:
-    fighters_df = fighters_df[fighters_df['Full Name'] != fighter1]
-if fighter2 in fighters_df['Full Name'].values:
-    fighters_df = fighters_df[fighters_df['Full Name'] != fighter2]
+# Filter fighters based on selected weight class
+filtered_fighters = fight_data[fight_data['Weight Class'] == selected_weight_class]['Fighter1'].unique()
 
-# Display fighter stats
-if fighter1 != "Please select or type in the Fighter's name":
-    fighter1_stats = fighters_df[fighters_df['Full Name'] == fighter1]
-    st.write("Fighter 1 Stats:", fighter1_stats.transpose())
+# Fighter dropdowns
+col1, col2 = st.columns(2)
+with col1:
+    fighter1 = st.selectbox('Select Fighter 1', options=filtered_fighters, key='f1')
+    fighter1_stats = fight_data[fight_data['Fighter1'] == fighter1].iloc[0]
+    st.write('Fighter 1 Stats:', fighter1_stats)
+with col2:
+    fighter2 = st.selectbox('Select Fighter 2', options=[f for f in filtered_fighters if f != fighter1], key='f2')
+    fighter2_stats = fight_data[fight_data['Fighter1'] == fighter2].iloc[0]
+    st.write('Fighter 2 Stats:', fighter2_stats)
 
-if fighter2 != "Please select or type in the Fighter's name":
-    fighter2_stats = fighters_df[fighters_df['Full Name'] == fighter2]
-    st.write("Fighter 2 Stats:", fighter2_stats.transpose())
-
-# Predict and display fight outcome
-if st.button("Predict Outcome"):
-    if fighter1 != "Please select or type in the Fighter's name" and fighter2 != "Please select or type in the Fighter's name":
-        # Placeholder for actual prediction logic
-        # You would need to encode the selected fighters' details and any required fight parameters
-        # For demonstration, this is simplified and may need actual feature engineering
-        st.write("Prediction: Fighter 1 Wins!")  # Placeholder prediction
-    else:
-        st.error("Please select both fighters.")
-
+# Predict button
+if st.button('Predict Outcome'):
+    # Prepare data for prediction (adjust this according to your model's trained features)
+    input_data = np.array([fighter1_stats.values[:-1] + fighter2_stats.values[:-1]])  # Adjust as per actual feature requirements
+    prediction = model.predict(input_data)
+    win_status = 'Fighter 1 Wins' if prediction == 1 else 'Fighter 2 Wins'
+    st.success(f'Prediction: {win_status}')
