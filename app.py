@@ -16,11 +16,11 @@ fighter_names = pd.read_csv(data_path)
 file_3_data_path = os.path.join('File 3.csv')
 fighter_profile = pd.read_csv(file_3_data_path)
 
-# Check and handle missing columns
-expected_columns = ['Fighter1','Fighter2','Weight Class','Winning Method','Round Time','Win/Loss (Fighter1)','Win Rate (Fighter 1)','Total Fights (Fighter 1)','Win (Fighter 1)','Lose (Fighter 1)','Draw (Fighter 1)','SLpM (Fighter 1)','Str. Acc. (Fighter 1)','SApM (Fighter 1)','Str. Def (Fighter 1)','TD Avg. (Fighter 1)','TD Acc. (Fighter 1)','TD Def. (Fighter 1)','Sub. Avg. (Fighter 1)','Win Rate (Fighter 2)','Total Fights (Fighter 2)','Win (Fighter 2)','Lose (Fighter 2)','Draw (Fighter 2)','SLpM (Fighter 2)','Str. Acc. (Fighter 2)','SApM (Fighter 2)','Str. Def (Fighter 2)','TD Avg. (Fighter 2)','TD Acc. (Fighter 2)','TD Def. (Fighter 2)','Sub. Avg. (Fighter 2)']
-if missing_columns:
-    st.error(f"Missing expected columns: {missing_columns}")
-    st.stop()
+# # Check and handle missing columns
+# expected_columns = ['Fighter1','Fighter2','Weight Class','Winning Method','Round Time','Win/Loss (Fighter1)','Win Rate (Fighter 1)','Total Fights (Fighter 1)','Win (Fighter 1)','Lose (Fighter 1)','Draw (Fighter 1)','SLpM (Fighter 1)','Str. Acc. (Fighter 1)','SApM (Fighter 1)','Str. Def (Fighter 1)','TD Avg. (Fighter 1)','TD Acc. (Fighter 1)','TD Def. (Fighter 1)','Sub. Avg. (Fighter 1)','Win Rate (Fighter 2)','Total Fights (Fighter 2)','Win (Fighter 2)','Lose (Fighter 2)','Draw (Fighter 2)','SLpM (Fighter 2)','Str. Acc. (Fighter 2)','SApM (Fighter 2)','Str. Def (Fighter 2)','TD Avg. (Fighter 2)','TD Acc. (Fighter 2)','TD Def. (Fighter 2)','Sub. Avg. (Fighter 2)']
+# if missing_columns:
+#     st.error(f"Missing expected columns: {missing_columns}")
+#     st.stop()
 
 # App title
 st.title('Fight Win Predictor')
