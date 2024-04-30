@@ -18,7 +18,9 @@ def process_features(fighter1, fighter2):
     features_f2 = features_f2.iloc[:,20:]
     features_f2 = features_f2.iloc[0:1,:]
     # features = pd.merge(features_f1,features_f2, on='Weight Class')
-    features = pd.concat([features_f1,features_f2], axis=1, ignore_index = True)
+    features_f1.reset_index(drop=True, inplace=True)
+    features_f2.reset_index(drop=True, inplace=True)
+    features = pd.concat([features_f1,features_f2], axis=1)
     return features
     
 # Application Title
