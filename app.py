@@ -7,7 +7,7 @@ from sklearn.preprocessing import StandardScaler
 # Load data and model
 
 data_path = os.path.join('File 3.csv')
-model_file = os.path.join('new_fight_event_full.csv')
+model_file = os.path.join('new_fight_detail_full.csv')
 model_path = os.path.join('fight_model.pkl')
 
 fighters_data = pd.read_csv(model_file)
