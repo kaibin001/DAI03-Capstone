@@ -47,11 +47,9 @@ st.title('Fight Win Predictor')
 
 # Selecting a weight class (filter now uses one-hot encoded columns)
 try:
-    # Extract original weight classes before encoding
     weight_classes = [col.split('_')[-1] for col in fight_data.columns if 'Weight Class_' in col]
     selected_weight_class = st.selectbox('Select Weight Class', weight_classes)
 
-    # Filter data based on selected weight class (using encoded column)
     filtered_fight_data = fight_data[fight_data[f'Weight Class_{selected_weight_class}'] == 1]
 except Exception as e:
     st.error(f"Failed to setup weight class selection: {str(e)}")
@@ -76,5 +74,16 @@ except Exception as e:
 # Predict button
 if st.button('Predict Outcome'):
     try:
-        # Prepare input data for prediction, ensuring no non-numeric data remains
-        input_features = filtered_fight_data.drop(['Fighter1', 'Fighter2'], axis
+        # Ensure only the model's expected features are included
+        input_features = filtered_fight_data.drop(['Fighter1', 'Fighter2'], axis=1).columns.tolist()
+        fighter1_features = filtered_fight_data.loc[filtered_fight_data['Fighter1'] == fighter1, input_features].iloc[0].values
+        fighter2_features = filtered_fight_data.loc[filtered_fight_data['Fighter2'] == fighter2, input_features].iloc[0].values
+        input_data = np.array([np.concatenate((fighter1_features, fighter2_features))])
+
+        # Perform prediction
+        prediction = model.predict(input_data)
+        win_status = 'Fighter 1 Wins' if prediction == 1 else 'Fighter 2 Wins'
+        st.success(f'Prediction: {win_status}')
+    except Exception as e:
+        st.error(f"An error occurred during prediction: {str(e)}")
+
