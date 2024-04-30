@@ -35,8 +35,19 @@ if st.button('Predict Fight Outcome'):
     prediction = model.predict(input_data)
     result = 'Fighter 1 Wins' if prediction == 1 else 'Fighter 2 Wins'
     st.success(result)
-
+    
 def prepare_input_data(fighter1, fighter2, fighter_data):
-    # This function should prepare the input data for the model
-    # Convert fighter stats to the model's expected input format
-    return input_data
+    # This function needs to prepare the data format exactly as the model expects
+    # Let's assume your model needs numerical stats of the fighters as input
+    
+    # Example: Extract numeric stats for both fighters
+    f1_stats = fighter_data[fighter_data['Full Name'] == fighter1].select_dtypes(include=[np.number])
+    f2_stats = fighter_data[fighter_data['Full Name'] == fighter2].select_dtypes(include=[np.number])
+    
+    # Flatten the arrays and concatenate them
+    if not f1_stats.empty and not f2_stats.empty:
+        input_data = np.hstack((f1_stats.values.flatten(), f2_stats.values.flatten()))
+        input_data = input_data.reshape(1, -1)  # Reshape for a single sample prediction
+        return input_data
+    else:
+        return None
