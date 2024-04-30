@@ -15,7 +15,7 @@ def process_features(fighter1, fighter2):
     features_f1 = features_f1.iloc[:,7:20]
     features_f2 = fight_events.loc[fight_events['Fighter2']==fighter2]
     features_f2 = features_f2.iloc[:,20:]
-    pd.concat([features_f1,features_f2], axis=1)
+    features = pd.concat([features_f1,features_f2], axis=1)
     return features
     
 # Application Title
