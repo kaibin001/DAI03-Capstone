@@ -9,16 +9,19 @@ with open(model_path, 'rb') as file:
     model = pickle.load(file)
 
 # Load fighter data
-fighter_data_path = 'File 3.csv'
+fighter_data_path = 'new_fight_detail_full.csv'
 fighter_data = pd.read_csv(fighter_data_path)
+
+fighter_profile_path = 'File 3.csv'
+fighter_profile = pd.read_csv(fighter_profile_path)
 
 def prepare_input_data(fighter1, fighter2, fighter_data):
     # This function needs to prepare the data format exactly as the model expects
     # Let's assume your model needs numerical stats of the fighters as input
     
     # Example: Extract numeric stats for both fighters
-    f1_stats = fighter_data[fighter_data['Full Name'] == fighter1].select_dtypes(include=[np.number])
-    f2_stats = fighter_data[fighter_data['Full Name'] == fighter2].select_dtypes(include=[np.number])
+    f1_stats = fighter_data[fighter_profile['Full Name'] == fighter1].select_dtypes(include=[np.number])
+    f2_stats = fighter_data[fighter_profile['Full Name'] == fighter2].select_dtypes(include=[np.number])
     
     # Flatten the arrays and concatenate them
     if not f1_stats.empty and not f2_stats.empty:
@@ -29,7 +32,7 @@ def prepare_input_data(fighter1, fighter2, fighter_data):
         return None
         
 # Dropdown to select fighters
-fighter_list = sorted(fighter_data['Full Name'].unique())
+fighter_list = sorted(fighter_profile['Full Name'].unique())
 fighter1 = st.selectbox('Select Fighter 1', ['Select a fighter'] + fighter_list)
 fighter2 = st.selectbox('Select Fighter 2', ['Select a fighter'] + fighter_list)
 
@@ -39,10 +42,10 @@ if fighter1 in fighter_list:
 
 # Display fighter stats
 if fighter1 != 'Select a fighter':
-    st.write(fighter_data[fighter_data['Full Name'] == fighter1])
+    st.write(fighter_data[fighter_profile['Full Name'] == fighter1])
 
 if fighter2 != 'Select a fighter' and fighter2 != fighter1:
-    st.write(fighter_data[fighter_data['Full Name'] == fighter2])
+    st.write(fighter_data[fighter_profile['Full Name'] == fighter2])
 
 # Button to predict the outcome
 if st.button('Predict Fight Outcome'):
