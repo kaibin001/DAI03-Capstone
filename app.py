@@ -36,11 +36,11 @@ filtered_fighters = fight_data[fight_data['Weight Class'] == selected_weight_cla
 col1, col2 = st.columns(2)
 with col1:
     fighter1 = st.selectbox('Select Fighter 1', options=filtered_fighters, key='f1')
-    fighter1_stats = fighter_names[fighter_names['Column_Name_for_Fighter'] == fighter1].iloc[0]
+    fighter1_stats = fighter_names[fighter_names['Full Name'] == fighter1].iloc[0]
     st.write('Fighter 1 Stats:', fighter1_stats)
 with col2:
     fighter2 = st.selectbox('Select Fighter 2', options=[f for f in filtered_fighters if f != fighter1], key='f2')
-    fighter2_stats = fighter_names[fighter_names['Column_Name_for_Fighter'] == fighter2].iloc[0]
+    fighter2_stats = fighter_names[fighter_names['Full Name'] == fighter2].iloc[0]
     st.write('Fighter 2 Stats:', fighter2_stats)
 
 # Predict button
