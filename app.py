@@ -27,22 +27,28 @@ try:
     fight_data['Time'] = fight_data['Time'].apply(time_to_seconds)
 
     # Apply one-hot encoding to categorical columns that affect the model's decision
-    fight_data = pd.get_dummies(fight_data, columns=['Weight Class', 'Winning Method', 'Win/Loss (Fighter1)'])
-
-    # If other categorical columns need to be encoded, use LabelEncoder or additional one-hot encoding here
-    # Example for a hypothetical column 'Other_Categorical_Column'
-    # encoder = LabelEncoder()
-    # fight_data['Other_Categorical_Column'] = encoder.fit_transform(fight_data['Other_Categorical_Column'])
+    fight_data = pd.get_dummies(fight_data, columns=['Winning Method', 'Win/Loss (Fighter1)'])
 
 except Exception as e:
     st.error(f"Failed to load or prepare fight data: {str(e)}")
+
+# Encode fighter names
+encoder = LabelEncoder()
+try:
+    all_fighters = pd.concat([fight_data['Fighter1'], fight_data['Fighter2']]).unique()
+    encoder.fit(all_fighters)
+    fight_data['Fighter1'] = encoder.transform(fight_data['Fighter1'])
+    fight_data['Fighter2'] = encoder.transform(fight_data['Fighter2'])
+except Exception as e:
+    st.error(f"Failed to encode fighter names: {str(e)}")
 
 # App title
 st.title('Fight Win Predictor')
 
 # Selection for weight class
 try:
-    weight_classes = fight_data['Weight Class'].unique()  # This assumes 'Weight Class' is still a valid column name
+    # This assumes 'Weight Class' still exists in the DataFrame after preprocessing
+    weight_classes = fight_data['Weight Class'].unique()
     selected_weight_class = st.selectbox('Select Weight Class', options=weight_classes)
     filtered_fight_data = fight_data[fight_data['Weight Class'] == selected_weight_class]
 except Exception as e:
@@ -50,12 +56,12 @@ except Exception as e:
 
 # Fighter dropdowns
 try:
-    filtered_fighters = filtered_fight_data['Fighter1'].unique()  # Adjust according to how fighters are identified post-encoding
+    filtered_fighters = filtered_fight_data['Fighter1'].unique()
     col1, col2 = st.columns(2)
     with col1:
-        fighter1 = st.selectbox('Select Fighter 1', options=filtered_fighters)
+        fighter1 = st.selectbox('Select Fighter 1', options=filtered_fighters, format_func=lambda x: encoder.inverse_transform([x])[0])
     with col2:
-        fighter2 = st.selectbox('Select Fighter 2', options=filtered_fighters)
+        fighter2 = st.selectbox('Select Fighter 2', options=filtered_fighters, format_func=lambda x: encoder.inverse_transform([x])[0])
 except Exception as e:
     st.error(f"Failed to setup fighter selection: {str(e)}")
 
@@ -63,11 +69,7 @@ except Exception as e:
 if st.button('Predict Outcome'):
     try:
         # Prepare input data for prediction
-        # Make sure to adjust feature selection to match the model's expectations
-        features = ['feature1', 'feature2']  # Placeholder for actual feature names
-        fighter1_data = filtered_fight_data[filtered_fight_data['Fighter1'] == fighter1][features].iloc[0].values
-        fighter2_data = filtered_fight_data[filtered_fight_data['Fighter2'] == fighter2][features].iloc[0].values
-        input_data = np.array([np.concatenate((fighter1_data, fighter2_data))])
+        input_data = np.array([np.concatenate((fighter1, fighter2))])  # Make sure the feature array is correct
 
         # Perform prediction
         prediction = model.predict(input_data)
