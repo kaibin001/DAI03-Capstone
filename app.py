@@ -12,39 +12,34 @@ def load_model():
 
 model = load_model()
 
-# Load fighter names and stats
-fighter_names = pd.read_csv('File 3.csv')
-fighter_stats = pd.read_csv('new_fight_detail_full.csv')
+# Load datasets
+fighters_df = pd.read_csv('new_fight_detail_full.csv')
 
-# App title
+# Convert percentage columns if necessary
+# fighters_df['SomeColumn'] = fighters_df['SomeColumn'].str.rstrip('%').astype('float') / 100
+
+# Streamlit user interface
 st.title('UFC Fight Predictor')
 
-# Dropdown for selecting fighters
-fighter1 = st.selectbox('Select Fighter 1', ['Select a fighter'] + sorted(fighter_names['Full Name'].unique()))
-fighter2 = st.selectbox('Select Fighter 2', ['Select a fighter'] + sorted(fighter_names['Full Name'].unique()))
+# Selecting fighters
+fighter1 = st.selectbox('Select Fighter 1', options=fighters_df['Fighter1'].unique())
+fighter2 = st.selectbox('Select Fighter 2', options=[f for f in fighters_df['Fighter2'].unique() if f != fighter1])
 
-# Filter out the same fighter
-if fighter1 in fighter_names['Full Name'].values:
-    fighter_names = fighter_names[fighter_names['Full Name'] != fighter1]
+# Show stats
+if st.button('Show Stats'):
+    st.write('Fighter 1 Stats:', fighters_df[fighters_df['Fighter1'] == fighter1])
+    st.write('Fighter 2 Stats:', fighters_df[fighters_df['Fighter2'] == fighter2])
 
-# Display fighter stats
-if fighter1 != 'Select a fighter':
-    st.write(fighter_stats[fighter_stats['Full Name'] == fighter1])
-if fighter2 != 'Select a fighter':
-    st.write(fighter_stats[fighter_stats['Full Name'] == fighter2])
+# Prediction
+if st.button('Predict Fight Outcome'):
+    # Assume function `prepare_input` processes the input features necessary for the model
+    input_features = prepare_input(fighter1, fighter2, fighters_df)
+    prediction = model.predict([input_features])[0]
+    winner = 'Fighter 1' if prediction == 1 else 'Fighter 2'
+    st.success(f'Predicted Winner: {winner}')
 
-# Button to make prediction
-if st.button('Predict Outcome'):
-    if fighter1 != 'Select a fighter' and fighter2 != 'Select a fighter':
-        # Example: assuming your model takes some specific inputs
-        input_features = prepare_features(fighter1, fighter2, fighter_stats)
-        prediction = model.predict([input_features])
-        winner = 'Fighter 1' if prediction == 1 else 'Fighter 2'
-        st.success(f'Predicted Winner: {winner}')
-    else:
-        st.error('Please select both fighters.')
+def prepare_input(fighter1, fighter2, df):
+    # Process and return the input features from dataframe for the model prediction
+    # Example placeholder
+    return np.array([0])  # Replace with actual feature extraction logic
 
-def prepare_features(fighter1, fighter2, stats):
-    # This function should prepare the features from your dataset for the model
-    # Example implementation needed based on how your model was trained
-    return np.array([])
