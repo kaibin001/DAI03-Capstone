@@ -29,16 +29,16 @@ with col1:
     fighter1 = st.selectbox('Select Fighter 1', options=['Please select a fighter'] + sorted(fighter_names['Full Name'].tolist()), key='f1')
     if fighter1 != 'Please select a fighter':
         fighter1_stats = fighter_names[fighter_names['Full Name'] == fighter1].iloc[0]
-        general_stats_1 = format_stats(fighter1_stats[['Win Rate', 'Total Fight', 'Win', 'Lose', 'Draw', 'Height', 'Weight']])
-        performance_stats_1 = format_stats(fighter1_stats[['SLpM', 'Str Acc', 'SApM', 'Str Def', 'TD Avg', 'TD Acc', 'TD Def', 'Sub. Avg']])
+        general_stats_1 = fighter1_stats[['Win Rate', 'Total Fight', 'Win', 'Lose', 'Draw', 'Height', 'Weight']]
+        performance_stats_1 = fighter1_stats[['SLpM', 'Str Acc', 'SApM', 'Str Def', 'TD Avg', 'TD Acc', 'TD Def', 'Sub. Avg']]
         st.write('Fighter 1 General Stats:', general_stats_1)
         st.write('Fighter 1 Performance Stats:', performance_stats_1)
 with col2:
     fighter2 = st.selectbox('Select Fighter 2', options=['Please select a fighter'] + sorted(fighter_names[fighter_names['Full Name'] != fighter1]['Full Name'].tolist()), key='f2')
     if fighter2 != 'Please select a fighter':
         fighter2_stats = fighter_names[fighter_names['Full Name'] == fighter2].iloc[0]
-        general_stats_2 = format_stats(fighter2_stats[['Win Rate', 'Total Fight', 'Win', 'Lose', 'Draw', 'Height', 'Weight']])
-        performance_stats_2 = format_stats(fighter2_stats[['SLpM', 'Str Acc', 'SApM', 'Str Def', 'TD Avg', 'TD Acc.', 'TD Def', 'Sub. Avg']])
+        general_stats_2 = fighter2_stats[['Win Rate', 'Total Fight', 'Win', 'Lose', 'Draw', 'Height', 'Weight']]
+        performance_stats_2 = fighter2_stats[['SLpM', 'Str Acc', 'SApM', 'Str Def', 'TD Avg', 'TD Acc.', 'TD Def', 'Sub. Avg']]
         st.write('Fighter 2 General Stats:', general_stats_2)
         st.write('Fighter 2 Performance Stats:', performance_stats_2)
 
