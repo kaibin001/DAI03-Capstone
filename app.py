@@ -9,7 +9,11 @@ from sklearn.preprocessing import LabelEncoder
 def time_to_seconds(time_str):
     minutes, seconds = map(int, time_str.split(':'))
     return minutes * 60 + seconds
-
+    
+# Function to convert percentage string to float
+def percent_to_float(x):
+    return float(x.strip('%')) / 100 if isinstance(x, str) else x
+    
 # Load the trained model
 model_path = os.path.join('fight_model.pkl')
 try:
@@ -25,6 +29,14 @@ try:
 
     # Convert 'Time' from M:SS to seconds
     fight_data['Time'] = fight_data['Time'].apply(time_to_seconds)
+
+    # Convert all percentage columns to floats
+    percentage_columns = [
+        'Win Rate (Fighter 1)', 'Str. Def (Fighter 1)', 'Str. Acc. (Fighter 1)', 'TD Def. (Fighter 1)', 'TD Acc. (Fighter 1)',
+        'Win Rate (Fighter 2)', 'Str. Def (Fighter 2)', 'Str. Acc. (Fighter 2)', 'TD Def. (Fighter 2)', 'TD Acc. (Fighter 2)'
+    ]
+    for column in percentage_columns:
+        fight_data[column] = fight_data[column].apply(percent_to_float)
 
     # Apply one-hot encoding to categorical columns
     fight_data = pd.get_dummies(fight_data, columns=['Weight Class', 'Winning Method', 'Win/Loss (Fighter1)'])
