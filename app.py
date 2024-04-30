@@ -51,15 +51,15 @@ if st.button('Predict Outcome'):
     try:
         # Ensure only the model's expected features are included
         # Assuming 'model_features' is a list of the column names expected by the model
-        model_features = [
-    'Round', 'Weight Class',  # Categorical, ensure encoded
+        mmodel_features = [
+    'Round', 'Weight Class',  # Make sure 'Weight Class' is encoded
     'Total Fights (Fighter 1)', 'Win (Fighter 1)', 'Lose (Fighter 1)', 'Draw (Fighter 1)',
     'SLpM (Fighter 1)', 'Str. Acc. (Fighter 1)', 'SApM (Fighter 1)', 'Str. Def (Fighter 1)',
     'TD Avg. (Fighter 1)', 'TD Acc. (Fighter 1)', 'TD Def. (Fighter 1)', 'Sub. Avg. (Fighter 1)',
     'Total Fights (Fighter 2)', 'Win (Fighter 2)', 'Lose (Fighter 2)', 'Draw (Fighter 2)',
     'SLpM (Fighter 2)', 'Str. Acc. (Fighter 2)', 'SApM (Fighter 2)', 'Str. Def (Fighter 2)',
     'TD Avg. (Fighter 2)', 'TD Acc. (Fighter 2)', 'TD Def. (Fighter 2)', 'Sub. Avg. (Fighter 2)'
-]  # Update this list with actual model features
+]
 
         # Prepare data for model prediction, filtering out all columns not in model_features
         fighter1_features = filtered_fight_data.loc[filtered_fight_data['Fighter1'] == fighter1, model_features].iloc[0].values
