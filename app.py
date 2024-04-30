@@ -26,7 +26,7 @@ st.title('Fight Win Predictor')
 # Helper function to format stats tables
 def format_stats(stats):
     # Convert relevant fields to float before formatting
-    for key in ['Win Rate', 'Str Acc', 'Str Def', 'TD Acc', 'TD Def']:
+    for key in ['Win Rate', 'Str Def', 'TD Acc', 'TD Def']:
         stats[key] = f"{float(stats[key])*100:.2f}%"  # Apply percentage formatting
     return stats
 
