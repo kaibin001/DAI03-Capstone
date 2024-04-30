@@ -5,8 +5,18 @@ import pickle
 # Load the model and data
 model = pickle.load(open('fight_model.pkl', 'rb'))
 fighter_details = pd.read_csv('File 3.csv')
+fight_events = pd.read_csv('new_fight_detail_full.csv')
 
 
+def process_features(fighter1, fighter2):
+    # You need to replace this part with actual feature processing based on your model
+    # This is just a placeholder
+    features_f1 = fight_events.loc[fight_events['Fighter1']==fighter1]
+    features_f1 = features_f1.iloc[:,7:20]
+    features_f2 = fight_events.loc[fight_events['Fighter2']==fighter2]
+    features_f2 = features.iloc[:,20:]
+    return features
+    
 # Application Title
 st.title("UFC Fight Predictor")
 
@@ -26,7 +36,7 @@ if st.button("Predict Winner"):
         st.error("Please select both fighters.")
     else:
         # Assuming you have a function to process input features
-        input_features = process_features(fighter1, fighter2, fighter_details)
+        input_features = process_features(fighter1, fighter2)
         st.write(fighter1)
         st.write(fighter2)
         st.write(fighter_details)
@@ -34,9 +44,4 @@ if st.button("Predict Winner"):
         winner = "Fighter 1 Wins" if prediction == 1 else "Fighter 2 Wins"
         st.success(winner)
 
-def process_features(fighter1, fighter2, df):
-    # You need to replace this part with actual feature processing based on your model
-    # This is just a placeholder
-    features = []
-    return features
 
