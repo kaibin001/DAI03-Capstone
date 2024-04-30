@@ -4,7 +4,7 @@ import numpy as np
 import pickle
 
 # Load the trained model
-# @st.experimental_memo(allow_output_mutation=True)
+@st.cache_data(allow_output_mutation=True)
 def load_model():
     with open('fight_model.pkl', 'rb') as file:
         model = pickle.load(file)
@@ -15,6 +15,13 @@ model = load_model()
 # Load datasets
 fighters_df = pd.read_csv('new_fight_detail_full.csv')
 
+def prepare_input(fighter1, fighter2, df):
+    # This function should prepare the features from your dataset for the model
+    # Extract relevant features and perform any required preprocessing
+    # This is a placeholder; you'll need to adapt it based on your model's needs
+    features = np.array([0])  # Replace with actual feature extraction logic
+    return features
+    
 # App title
 st.title('UFC Fight Predictor')
 
@@ -40,9 +47,4 @@ if st.button('Predict Outcome'):
         winner = 'Fighter 1' if prediction == 1 else 'Fighter 2'
         st.success(f'Predicted Winner: {winner}')
 
-def prepare_input(fighter1, fighter2, df):
-    # This function should prepare the features from your dataset for the model
-    # Extract relevant features and perform any required preprocessing
-    # This is a placeholder; you'll need to adapt it based on your model's needs
-    features = np.array([0])  # Replace with actual feature extraction logic
-    return features
+
