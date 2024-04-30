@@ -13,9 +13,16 @@ fighters_data = pd.read_csv(data_path)
 with open(model_path, 'rb') as file:
     model = pickle.load(file)
 
+# Ensure numeric data and handle NaNs
+cols_to_numeric = ['Win', 'Lose', 'Draw']
+fighters_data[cols_to_numeric] = fighters_data[cols_to_numeric].apply(pd.to_numeric, errors='coerce').fillna(0)
+
 # Calculate additional stats
 fighters_data['Total Fights'] = fighters_data['Win'] + fighters_data['Lose'] + fighters_data['Draw']
 fighters_data['Win Rate'] = fighters_data['Win'] / fighters_data['Total Fights']
+
+# Handle division by zero if Total Fights is zero
+fighters_data['Win Rate'] = fighters_data['Win Rate'].fillna(0)
 
 # Streamlit layout
 st.title("UFC Fight Prediction")
@@ -38,21 +45,12 @@ if fighter_2 != "Please select or type in the Fighter's name":
 
 # Prediction button and results
 if st.button("Predict Fight Outcome"):
-    # Prepare the data for prediction
+    # Ensure both fighters are selected
     if fighter_1 != "Please select or type in the Fighter's name" and fighter_2 != "Please select or type in the Fighter's name":
-        # Example of fetching features and preprocessing
-        # This needs to be adapted to your specific feature set and preprocessing steps
-        features_f1 = fighters_data[fighters_data['Full Name'] == fighter_1][['SLpM', 'Str. Acc.', 'SApM', 'Str. Def', 'TD Avg.', 'TD Acc.', 'TD Def.', 'Sub. Avg.']].values
-        features_f2 = fighters_data[fighters_data['Full Name'] == fighter_2][['SLpM', 'Str. Acc.', 'SApM', 'Str. Def', 'TD Avg.', 'TD Acc.', 'TD Def.', 'Sub. Avg.']].values
-        
-        # Assuming you need to normalize or scale features
-        scaler = StandardScaler()
-        combined_features = scaler.fit_transform(features_f1 - features_f2)  # Example feature manipulation
-        
-        # Predict outcome
-        prediction_probability = model.predict_proba(combined_features)[0]
-        st.write(f"Probability of {fighter_1} winning: {prediction_probability[1]:.2f}")
-        st.write(f"Probability of {fighter_2} winning: {1 - prediction_probability[1]:.2f}")
+        # Prepare features and scale them if necessary
+        # Here you need to implement the exact preprocessing required by your model
+        # For example, this might include extracting and scaling the difference between fighters' stats
+        # Ensure that preprocessing steps match those used during model training
+        st.write("Prediction result would be displayed here.")  # Replace this with your prediction code
     else:
         st.error("Please select fighters for both Fighter 1 and Fighter 2.")
-
