@@ -6,8 +6,11 @@ import os
 
 # Load the trained model
 model_path = os.path.join('fight_model.pkl')
-with open(model_path, 'rb') as file:
-    model = pickle.load(file)
+try:
+    with open(model_path, 'rb') as file:
+        model = pickle.load(file)
+except Exception as e:
+    st.error(f"Failed to load model: {str(e)}")
 
 # Load fight data and fighter names
 fight_data_path = os.path.join('new_fight_detail_full.csv')
