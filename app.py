@@ -29,9 +29,10 @@ try:
     # Apply one-hot encoding to categorical columns that affect the model's decision
     fight_data = pd.get_dummies(fight_data, columns=['Weight Class', 'Winning Method', 'Win/Loss (Fighter1)'])
 
-    # Optionally encode other categorical columns as needed using LabelEncoder or additional one-hot encoding
-    encoder = LabelEncoder()
-    fight_data['Other_Categorical_Column'] = encoder.fit_transform(fight_data['Other_Categorical_Column'])
+    # If other categorical columns need to be encoded, use LabelEncoder or additional one-hot encoding here
+    # Example for a hypothetical column 'Other_Categorical_Column'
+    # encoder = LabelEncoder()
+    # fight_data['Other_Categorical_Column'] = encoder.fit_transform(fight_data['Other_Categorical_Column'])
 
 except Exception as e:
     st.error(f"Failed to load or prepare fight data: {str(e)}")
@@ -39,16 +40,38 @@ except Exception as e:
 # App title
 st.title('Fight Win Predictor')
 
-# Example of using the data for prediction
+# Selection for weight class
+try:
+    weight_classes = fight_data['Weight Class'].unique()  # This assumes 'Weight Class' is still a valid column name
+    selected_weight_class = st.selectbox('Select Weight Class', options=weight_classes)
+    filtered_fight_data = fight_data[fight_data['Weight Class'] == selected_weight_class]
+except Exception as e:
+    st.error(f"Failed to setup weight class selection: {str(e)}")
+
+# Fighter dropdowns
+try:
+    filtered_fighters = filtered_fight_data['Fighter1'].unique()  # Adjust according to how fighters are identified post-encoding
+    col1, col2 = st.columns(2)
+    with col1:
+        fighter1 = st.selectbox('Select Fighter 1', options=filtered_fighters)
+    with col2:
+        fighter2 = st.selectbox('Select Fighter 2', options=filtered_fighters)
+except Exception as e:
+    st.error(f"Failed to setup fighter selection: {str(e)}")
+
+# Predict button
 if st.button('Predict Outcome'):
     try:
-        # Assuming the necessary preprocessing is done and you've chosen the features used in the model
-        features = ['Time', 'Total_Fights'] + [col for col in fight_data.columns if 'Weight Class_' in col] + ...
-        input_data = fight_data[features].iloc[0].values.reshape(1, -1)  # Reshape data for prediction
+        # Prepare input data for prediction
+        # Make sure to adjust feature selection to match the model's expectations
+        features = ['feature1', 'feature2']  # Placeholder for actual feature names
+        fighter1_data = filtered_fight_data[filtered_fight_data['Fighter1'] == fighter1][features].iloc[0].values
+        fighter2_data = filtered_fight_data[filtered_fight_data['Fighter2'] == fighter2][features].iloc[0].values
+        input_data = np.array([np.concatenate((fighter1_data, fighter2_data))])
 
         # Perform prediction
         prediction = model.predict(input_data)
-        win_status = 'Fighter 1 Wins' if prediction[0] == 1 else 'Fighter 2 Wins'
+        win_status = 'Fighter 1 Wins' if prediction == 1 else 'Fighter 2 Wins'
         st.success(f'Prediction: {win_status}')
     except Exception as e:
         st.error(f"An error occurred during prediction: {str(e)}")
