@@ -15,7 +15,7 @@ def process_features(fighter1, fighter2):
     features_f1 = features_f1.iloc[:,[4,5,7,8,9,10,11,12,13,14,15,16,17,18,19]]
     features_f1 = features_f1.iloc[0:1,:]
     features_f2 = fight_events.loc[fight_events['Fighter2']==fighter2]
-    features_f2 = features_f2.iloc[:,[[4,5,20,21,22,23,24,25,26,27,28,29,30,31,32]]
+    features_f2 = features_f2.iloc[:,[4,5,20,21,22,23,24,25,26,27,28,29,30,31,32]]
     features_f2 = features_f2.iloc[0:1,:]
     # features = pd.merge(features_f1,features_f2, on='Weight Class')
     features_f1.reset_index(drop=True, inplace=True)
