@@ -1,58 +1,42 @@
 import streamlit as st
 import pandas as pd
 import pickle
-import os
-from sklearn.preprocessing import StandardScaler
+from sklearn.preprocessing import LabelEncoder, StandardScaler
 
-# Load data and model
-
-data_path = os.path.join('File 3.csv')
-model_file = os.path.join('new_fight_detail_full.csv')
-model_path = os.path.join('fight_model.pkl')
-fighters_data = pd.read_csv(data_path)
-
-fighters_data = pd.read_csv(model_file)
+# Load fighter data and model
+fighters_df = pd.read_csv('File 3.csv')
+model_path = 'fight_model.pkl'
 with open(model_path, 'rb') as file:
     model = pickle.load(file)
 
-# Ensure numeric data and handle NaNs
-cols_to_numeric = data_path['Win', 'Lose', 'Draw']
-fighters_data[cols_to_numeric] = fighters_data[cols_to_numeric].apply(pd.to_numeric, errors='coerce').fillna(0)
-
-# Calculate additional stats
-fighters_data['Total Fights'] = fighters_data['Win'] + fighters_data['Lose'] + fighters_data['Draw']
-fighters_data['Win Rate'] = fighters_data['Win'] / fighters_data['Total Fights']
-
-# Handle division by zero if Total Fights is zero
-fighters_data['Win Rate'] = fighters_data['Win Rate'].fillna(0)
-
-# Streamlit layout
+# App title
 st.title("UFC Fight Prediction")
 
-# Dropdown for Fighter 1
-fighter_1 = st.selectbox("Fighter 1", ["Please select or type in the Fighter's name"] + fighters_data['Full Name'].tolist())
-filtered_data = fighters_data[fighters_data['Full Name'] != fighter_1]
+# Dropdown for selecting fighters
+fighter1 = st.selectbox("Fighter 1", ["Please select or type in the Fighter's name"] + sorted(fighters_df['Full Name'].unique()))
+fighter2 = st.selectbox("Fighter 2", ["Please select or type in the Fighter's name"] + sorted(fighters_df['Full Name'].unique()))
 
-# Dropdown for Fighter 2
-fighter_2 = st.selectbox("Fighter 2", ["Please select or type in the Fighter's name"] + filtered_data['Full Name'].tolist())
+if fighter1 in fighters_df['Full Name'].values:
+    fighters_df = fighters_df[fighters_df['Full Name'] != fighter1]
+if fighter2 in fighters_df['Full Name'].values:
+    fighters_df = fighters_df[fighters_df['Full Name'] != fighter2]
 
-# Show fighter stats if selected
-if fighter_1 != "Please select or type in the Fighter's name":
-    st.write("Fighter 1 Stats:")
-    st.write(fighters_data[fighters_data['Full Name'] == fighter_1][['Total Fights', 'Win Rate', 'Win', 'Lose', 'Draw', 'Height', 'Weight', 'SLpM', 'Str. Acc.', 'SApM', 'Str. Def', 'TD Avg.', 'TD Acc.', 'TD Def.', 'Sub. Avg.']])
+# Display fighter stats
+if fighter1 != "Please select or type in the Fighter's name":
+    fighter1_stats = fighters_df[fighters_df['Full Name'] == fighter1]
+    st.write("Fighter 1 Stats:", fighter1_stats.transpose())
 
-if fighter_2 != "Please select or type in the Fighter's name":
-    st.write("Fighter 2 Stats:")
-    st.write(fighters_data[fighters_data['Full Name'] == fighter_2][['Total Fights', 'Win Rate', 'Win', 'Lose', 'Draw', 'Height', 'Weight', 'SLpM', 'Str. Acc.', 'SApM', 'Str. Def', 'TD Avg.', 'TD Acc.', 'TD Def.', 'Sub. Avg.']])
+if fighter2 != "Please select or type in the Fighter's name":
+    fighter2_stats = fighters_df[fighters_df['Full Name'] == fighter2]
+    st.write("Fighter 2 Stats:", fighter2_stats.transpose())
 
-# Prediction button and results
-if st.button("Predict Fight Outcome"):
-    # Ensure both fighters are selected
-    if fighter_1 != "Please select or type in the Fighter's name" and fighter_2 != "Please select or type in the Fighter's name":
-        # Prepare features and scale them if necessary
-        # Here you need to implement the exact preprocessing required by your model
-        # For example, this might include extracting and scaling the difference between fighters' stats
-        # Ensure that preprocessing steps match those used during model training
-        st.write("Prediction result would be displayed here.")  # Replace this with your prediction code
+# Predict and display fight outcome
+if st.button("Predict Outcome"):
+    if fighter1 != "Please select or type in the Fighter's name" and fighter2 != "Please select or type in the Fighter's name":
+        # Placeholder for actual prediction logic
+        # You would need to encode the selected fighters' details and any required fight parameters
+        # For demonstration, this is simplified and may need actual feature engineering
+        st.write("Prediction: Fighter 1 Wins!")  # Placeholder prediction
     else:
-        st.error("Please select fighters for both Fighter 1 and Fighter 2.")
+        st.error("Please select both fighters.")
+
