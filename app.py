@@ -23,21 +23,21 @@ fight_data = fight_data.astype(str)
 st.title('Fight Win Predictor')
 
 # Weight class selection
-weight_classes = fight_data['Weight Class'].unique()
+weight_classes = fighter_names['Weight Class'].unique()
 selected_weight_class = st.selectbox('Select Weight Class', weight_classes)
 
 # Filter fighters based on selected weight class
-filtered_fighters = fight_data[fight_data['Weight Class'] == selected_weight_class]['Fighter1'].unique()
+filtered_fighters = fighter_names[fighter_names['Weight Class'] == selected_weight_class]['Fighter1'].unique()
 
 # Fighter dropdowns
 col1, col2 = st.columns(2)
 with col1:
     fighter1 = st.selectbox('Select Fighter 1', options=filtered_fighters, key='f1')
-    fighter1_stats = fight_data[fight_data['Fighter1'] == fighter1].iloc[0]
+    fighter1_stats = fighter_names[fighter_names['Fighter1'] == fighter1].iloc[0]
     st.write('Fighter 1 Stats:', fighter1_stats)
 with col2:
     fighter2 = st.selectbox('Select Fighter 2', options=[f for f in filtered_fighters if f != fighter1], key='f2')
-    fighter2_stats = fight_data[fight_data['Fighter1'] == fighter2].iloc[0]
+    fighter2_stats = fighter_names[fighter_names['Fighter1'] == fighter2].iloc[0]
     st.write('Fighter 2 Stats:', fighter2_stats)
 
 # Predict button
