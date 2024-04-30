@@ -4,7 +4,6 @@ import pickle
 
 # Load the model and data
 model = pickle.load(open('fight_model3.pkl', 'rb'))
-fighter_details = pd.read_csv('File 3.csv')
 fight_events = pd.read_csv('new_fight_detail_full.csv')
 
 
@@ -30,16 +29,13 @@ def process_features(fighter1, fighter2):
                        'TD Def. (Fighter 2)']
     for feature in percentage_features:
         features[feature] = features[feature].str.rstrip('%').astype('float') / 100
-    
-    st.write(features_f1)
-    st.write(features_f2)
     return features
     
 # Application Title
 st.title("UFC Fight Predictor")
 
 # Fighter Selection
-fighter_names = sorted(fighter_details['Full Name'].dropna().unique())
+fighter_names = sorted(fight_events['Fighter1'].dropna().unique())
 fighter1 = st.selectbox("Select Fighter 1", [''] + fighter_names)
 if fighter1:
     st.write("Fighter 1 Stats", fight_events[fight_events['Fighter1'] == fighter1])
