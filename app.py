@@ -5,15 +5,14 @@ import pickle
 import os
 
 # Load the trained model
-home_directory = os.path.expanduser('~')
-model_path = os.path.join(home_directory, 'fight_model.pkl')
+model_path = os.path.join('fight_model.pkl')
 with open(model_path, 'rb') as file:
     model = pickle.load(file)
 
 # Load fight data and fighter names
-fight_data_path = os.path.join(home_directory, 'new_fight_detail_full.csv')
+fight_data_path = os.path.join('new_fight_detail_full.csv')
 fight_data = pd.read_csv(fight_data_path)
-file_3_data_path = os.path.join(home_directory, 'File 3.csv')
+file_3_data_path = os.path.join('File 3.csv')
 fighter_names = pd.read_csv(file_3_data_path)
 
 # Convert all columns to string to avoid serialization issues
