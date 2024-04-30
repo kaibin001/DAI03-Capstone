@@ -6,6 +6,11 @@ import os
 from sklearn.preprocessing import LabelEncoder
 from sklearn.preprocessing import OneHotEncoder
 
+# Function to convert time string M:SS to total seconds
+def time_to_seconds(time_str):
+    minutes, seconds = map(int, time_str.split(':'))
+    return minutes * 60 + seconds
+
 # Load the trained model
 model_path = os.path.join('fight_model.pkl')
 try:
@@ -19,8 +24,12 @@ try:
     fight_data_path = os.path.join('new_fight_detail_full.csv')
     fight_data = pd.read_csv(fight_data_path)
 
+    # Convert 'Time' from M:SS to seconds
+    fight_data['Time'] = fight_data['Time'].apply(time_to_seconds)
+
     # Apply one-hot encoding to categorical columns
     fight_data = pd.get_dummies(fight_data, columns=['Weight Class', 'Winning Method'])
+
 except Exception as e:
     st.error(f"Failed to load or prepare fight data: {str(e)}")
 
@@ -34,7 +43,7 @@ try:
 except Exception as e:
     st.error(f"Failed to encode fighter names: {str(e)}")
 
-# App title and UI setup
+# App title
 st.title('Fight Win Predictor')
 
 # Selecting a weight class (filter now uses one-hot encoded columns)
@@ -65,7 +74,7 @@ try:
 except Exception as e:
     st.error(f"Failed to display fighter options or stats: {str(e)}")
 
-# Prediction logic with error handling
+# Predict button
 if st.button('Predict Outcome'):
     try:
         # Prepare input data for prediction, ensuring no non-numeric data remains
