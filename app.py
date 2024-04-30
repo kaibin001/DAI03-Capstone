@@ -23,13 +23,6 @@ if missing_columns:
 # App title
 st.title('Fight Win Predictor')
 
-# Helper function to format stats tables
-def format_stats(stats):
-    # Convert relevant fields to float before formatting
-    for key in ['Win Rate']:
-        stats[key] = f"{float(stats[key])*100:.2f}%"  # Apply percentage formatting
-    return stats
-
 # Fighter dropdowns
 col1, col2 = st.columns(2)
 with col1:
