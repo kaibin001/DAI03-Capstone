@@ -4,6 +4,7 @@ import numpy as np
 import pickle
 import os
 from sklearn.preprocessing import LabelEncoder
+from sklearn.preprocessing import OneHotEncoder
 
 # Load the trained model
 model_path = os.path.join('fight_model.pkl')
@@ -13,14 +14,17 @@ try:
 except Exception as e:
     st.error(f"Failed to load model: {str(e)}")
 
-# Load fight data
+# Load and prepare fight data
 try:
     fight_data_path = os.path.join('new_fight_detail_full.csv')
     fight_data = pd.read_csv(fight_data_path)
-except Exception as e:
-    st.error(f"Failed to load fight data: {str(e)}")
 
-# Initialize a LabelEncoder and encode fighter names
+    # Apply one-hot encoding to categorical columns
+    fight_data = pd.get_dummies(fight_data, columns=['Weight Class', 'Winning Method'])
+except Exception as e:
+    st.error(f"Failed to load or prepare fight data: {str(e)}")
+
+# Encode fighter names
 encoder = LabelEncoder()
 try:
     all_fighters = pd.concat([fight_data['Fighter1'], fight_data['Fighter2']]).unique()
@@ -30,41 +34,44 @@ try:
 except Exception as e:
     st.error(f"Failed to encode fighter names: {str(e)}")
 
-# App title
+# App title and UI setup
 st.title('Fight Win Predictor')
 
-# Selecting a weight class
+# Selecting a weight class (filter now uses one-hot encoded columns)
 try:
-    weight_classes = fight_data['Weight Class'].unique()
+    # Extract original weight classes before encoding
+    weight_classes = [col.split('_')[-1] for col in fight_data.columns if 'Weight Class_' in col]
     selected_weight_class = st.selectbox('Select Weight Class', weight_classes)
+
+    # Filter data based on selected weight class (using encoded column)
+    filtered_fight_data = fight_data[fight_data[f'Weight Class_{selected_weight_class}'] == 1]
 except Exception as e:
     st.error(f"Failed to setup weight class selection: {str(e)}")
 
-# Filter fighters based on selected weight class
+# Setup fighter dropdowns and display stats
+col1, col2 = st.columns(2)
 try:
-    filtered_fight_data = fight_data[fight_data['Weight Class'] == selected_weight_class]
     filtered_fighters1 = filtered_fight_data['Fighter1'].unique()
     filtered_fighters2 = filtered_fight_data['Fighter2'].unique()
+
+    with col1:
+        fighter1 = st.selectbox('Select Fighter 1', options=filtered_fighters1, format_func=lambda x: encoder.inverse_transform([x])[0])
+        fighter1_stats = filtered_fight_data[filtered_fight_data['Fighter1'] == fighter1].iloc[0]
+        st.write('Fighter 1 Stats:', fighter1_stats)
+    with col2:
+        fighter2 = st.selectbox('Select Fighter 2', options=filtered_fighters2, format_func=lambda x: encoder.inverse_transform([x])[0])
+        fighter2_stats = filtered_fight_data[filtered_fight_data['Fighter2'] == fighter2].iloc[0]
+        st.write('Fighter 2 Stats:', fighter2_stats)
 except Exception as e:
-    st.error(f"Failed to filter fighters based on weight class: {str(e)}")
+    st.error(f"Failed to display fighter options or stats: {str(e)}")
 
-# Fighter dropdowns
-col1, col2 = st.columns(2)
-with col1:
-    fighter1 = st.selectbox('Select Fighter 1', options=filtered_fighters1, format_func=lambda x: encoder.inverse_transform([x])[0])
-    fighter1_stats = filtered_fight_data[filtered_fight_data['Fighter1'] == fighter1].iloc[0]
-    st.write('Fighter 1 Stats:', fighter1_stats)
-with col2:
-    fighter2 = st.selectbox('Select Fighter 2', options=filtered_fighters2, format_func=lambda x: encoder.inverse_transform([x])[0])
-    fighter2_stats = filtered_fight_data[filtered_fight_data['Fighter2'] == fighter2].iloc[0]
-    st.write('Fighter 2 Stats:', fighter2_stats)
-
-# Predict button
+# Prediction logic with error handling
 if st.button('Predict Outcome'):
     try:
-        # Assuming filtered_fight_data is pre-filtered and prepared
-        fighter1_features = filtered_fight_data.loc[filtered_fight_data['Fighter1'] == fighter1].drop(['Fighter1', 'Fighter2'], axis=1).iloc[0].values
-        fighter2_features = filtered_fight_data.loc[filtered_fight_data['Fighter2'] == fighter2].drop(['Fighter1', 'Fighter2'], axis=1).iloc[0].values
+        # Prepare input data for prediction, ensuring no non-numeric data remains
+        input_features = filtered_fight_data.drop(['Fighter1', 'Fighter2'], axis=1).columns.tolist()
+        fighter1_features = filtered_fight_data.loc[filtered_fight_data['Fighter1'] == fighter1, input_features].iloc[0].values
+        fighter2_features = filtered_fight_data.loc[filtered_fight_data['Fighter2'] == fighter2, input_features].iloc[0].values
         input_data = np.array([np.concatenate((fighter1_features, fighter2_features))])
 
         # Perform prediction
