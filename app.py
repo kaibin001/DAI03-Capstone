@@ -15,7 +15,7 @@ with open(model_path, 'rb') as file:
     model = pickle.load(file)
 
 # Ensure numeric data and handle NaNs
-cols_to_numeric = ['Win', 'Lose', 'Draw']
+cols_to_numeric = data_path['Win', 'Lose', 'Draw']
 fighters_data[cols_to_numeric] = fighters_data[cols_to_numeric].apply(pd.to_numeric, errors='coerce').fillna(0)
 
 # Calculate additional stats
