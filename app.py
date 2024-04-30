@@ -23,11 +23,11 @@ fight_data = fight_data.astype(str)
 st.title('Fight Win Predictor')
 
 # Weight class selection
-weight_classes = fighter_names['Weight Class'].unique()
+weight_classes = fighter_names['Weight'].unique()
 selected_weight_class = st.selectbox('Select Weight Class', weight_classes)
 
 # Filter fighters based on selected weight class
-filtered_fighters = fighter_names[fighter_names['Weight Class'] == selected_weight_class]['Fighter1'].unique()
+filtered_fighters = fighter_names[fighter_names['Weight'] == selected_weight_class]['Fighter1'].unique()
 
 # Fighter dropdowns
 col1, col2 = st.columns(2)
