@@ -5,6 +5,7 @@ import pickle
 
 # Load the trained model
 # @st.cache_data(allow_output_mutation=True)
+
 def load_model():
     with open('fight_model.pkl', 'rb') as file:
         model = pickle.load(file)
