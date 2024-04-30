@@ -13,6 +13,8 @@ with open(model_path, 'rb') as file:
 # Load fight data
 fight_data_path = os.path.join('new_fight_detail_full.csv')
 fight_data = pd.read_csv(fight_data_path)
+fighter_profile_path = os.path.join('File 3.csv')
+fighter_profile = pd.read_csv(fighter_profile_path)
 
 # Initialize LabelEncoders for each categorical column
 categorical_columns = fight_data.select_dtypes(include=['object']).columns
@@ -38,11 +40,11 @@ filtered_fighters2 = filtered_fight_data['Fighter2'].unique()
 col1, col2 = st.columns(2)
 with col1:
     fighter1 = st.selectbox('Select Fighter 1', options=filtered_fighters1, format_func=lambda x: label_encoders['Fighter1'].inverse_transform([x])[0])
-    fighter1_stats = filtered_fight_data[filtered_fight_data['Fighter1'] == fighter1].iloc[0]
+    fighter1_stats = fighter_profile[fighter_profile['Full Name'] == fighter1].iloc[0]
     st.write('Fighter 1 Stats:', fighter1_stats)
 with col2:
     fighter2 = st.selectbox('Select Fighter 2', options=filtered_fighters2, format_func=lambda x: label_encoders['Fighter2'].inverse_transform([x])[0])
-    fighter2_stats = filtered_fight_data[filtered_fight_data['Fighter2'] == fighter2].iloc[0]
+    fighter2_stats =fighter_profile[fighter_profile['Full Name'] == fighter2].iloc[0]
     st.write('Fighter 2 Stats:', fighter2_stats)
 
 # Predict button
