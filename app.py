@@ -37,7 +37,7 @@ with col1:
         with stat_col1:
             st.write('Fighter 1 Stats:', general_stats_1)
         with stat_col2:
-            st.write(performance_stats_1)
+            st.write(' ',performance_stats_1)
 
 with col2:
     fighter2 = st.selectbox('Select Fighter 2', options=['Please select a fighter'] + sorted(fighter_names[fighter_names['Full Name'] != fighter1]['Full Name'].tolist()), key='f2')
@@ -51,7 +51,7 @@ with col2:
         with stat_col3:
             st.write('Fighter 2 Stats:', general_stats_2)
         with stat_col4:
-            st.write(performance_stats_2)
+            st.write(' ',performance_stats_2)
     
 
 # Predict button
