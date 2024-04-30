@@ -14,7 +14,7 @@ file_3_data_path = os.path.join('File 3.csv')
 fighter_names = pd.read_csv(file_3_data_path)
 
 # Check and handle missing columns
-expected_columns = ['Full Name', 'Win Rate', 'Total Fight', 'Win', 'Lose', 'Draw', 'Height', 'Weight', 'SLpM', 'Str Acc', 'SApM', 'Str Def', 'TD Avg', 'TD Acc', 'TD Def', 'Sub. Avg']
+expected_columns = ['Full Name', 'Win Rate', 'Total Fight', 'Win', 'Lose', 'Draw', 'Height', 'Weight', 'SLpM', 'Str Acc', 'SApM', 'Str Def', 'TD Avg', 'TD Acc', 'TD Def', 'Sub Avg']
 missing_columns = [col for col in expected_columns if col not in fighter_names.columns]
 if missing_columns:
     st.error(f"Missing expected columns: {missing_columns}")
@@ -45,7 +45,7 @@ with col2:
     if fighter2 != 'Please select a fighter':
         fighter2_stats = fighter_names[fighter_names['Full Name'] == fighter2].iloc[0]
         general_stats_2 = format_stats(fighter2_stats[['Win Rate', 'Total Fight', 'Win', 'Lose', 'Draw', 'Height', 'Weight']])
-        performance_stats_2 = format_stats(fighter2_stats[['SLpM', 'Str Acc', 'SApM', 'Str Def', 'TD Avg', 'TD Acc.', 'TD Def', 'Sub. Avg']])
+        performance_stats_2 = format_stats(fighter2_stats[['SLpM', 'Str Acc', 'SApM', 'Str Def', 'TD Avg', 'TD Acc.', 'TD Def', 'Sub Avg']])
         st.write('Fighter 2 General Stats:', general_stats_2)
         st.write('Fighter 2 Performance Stats:', performance_stats_2)
 
