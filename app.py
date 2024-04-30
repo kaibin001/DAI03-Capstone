@@ -13,11 +13,17 @@ with open(model_path, 'rb') as file:
 file_3_data_path = os.path.join('File 3.csv')
 fighter_names = pd.read_csv(file_3_data_path)
 
-# Convert all columns to string to avoid serialization issues
-fighter_names = fighter_names.astype(str)
-
 # App title
 st.title('Fight Win Predictor')
+
+# Helper function to format stats tables
+def format_stats(stats):
+    stats['Win Rate'] = f"{stats['Win Rate']*100:.2f}%"
+    stats['Str. Acc.'] = f"{stats['Str. Acc.']*100:.2f}%"
+    stats['Str. Def'] = f"{stats['Str. Def']*100:.2f}%"
+    stats['TD Acc.'] = f"{stats['TD Acc.']*100:.2f}%"
+    stats['TD Def.'] = f"{stats['TD Def']*100:.2f}%"
+    return stats
 
 # Fighter dropdowns
 col1, col2 = st.columns(2)
@@ -25,14 +31,18 @@ with col1:
     fighter1 = st.selectbox('Select Fighter 1', options=['Please select a fighter'] + sorted(fighter_names['Full Name'].tolist()), key='f1')
     if fighter1 != 'Please select a fighter':
         fighter1_stats = fighter_names[fighter_names['Full Name'] == fighter1].iloc[0]
-        st.write('Fighter 1 Stats:', fighter1_stats)
+        general_stats_1 = fighter1_stats[['Win Rate', 'Total Fight', 'Win', 'Lose', 'Draw', 'Height', 'Weight']]
+        performance_stats_1 = fighter1_stats[['SLpM', 'Str. Acc.', 'SApM', 'Str. Def', 'TD Avg.', 'TD Acc.', 'TD Def.', 'Sub. Avg.']]
+        st.write('Fighter 1 General Stats:', format_stats(general_stats_1))
+        st.write('Fighter 1 Performance Stats:', format_stats(performance_stats_1))
 with col2:
-    # Exclude selected Fighter 1 from Fighter 2's options
-    possible_fighters_2 = sorted(fighter_names[fighter_names['Full Name'] != fighter1]['Full Name'].tolist())
-    fighter2 = st.selectbox('Select Fighter 2', options=['Please select a fighter'] + possible_fighters_2, key='f2')
+    fighter2 = st.selectbox('Select Fighter 2', options=['Please select a fighter'] + sorted(fighter_names[fighter_names['Full Name'] != fighter1]['Full Name'].tolist()), key='f2')
     if fighter2 != 'Please select a fighter':
         fighter2_stats = fighter_names[fighter_names['Full Name'] == fighter2].iloc[0]
-        st.write('Fighter 2 Stats:', fighter2_stats)
+        general_stats_2 = fighter2_stats[['Win Rate', 'Total Fight', 'Win', 'Lose', 'Draw', 'Height', 'Weight']]
+        performance_stats_2 = fighter2_stats[['SLpM', 'Str. Acc.', 'SApM', 'Str. Def', 'TD Avg.', 'TD Acc.', 'TD Def.', 'Sub. Avg.']]
+        st.write('Fighter 2 General Stats:', format_stats(general_stats_2))
+        st.write('Fighter 2 Performance Stats:', format_stats(performance_stats_2))
 
 # Predict button
 if st.button('Predict Outcome'):
@@ -45,4 +55,3 @@ if st.button('Predict Outcome'):
         st.success(f'Prediction: {win_status}')
     else:
         st.error("Please select both fighters.")
-
