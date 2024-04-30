@@ -1,46 +1,39 @@
 import streamlit as st
 import pandas as pd
-import numpy as np
 import pickle
 
-# Load the trained model
-@st.cache(allow_output_mutation=True)
-def load_model():
-    with open('fight_model.pkl', 'rb') as file:
-        model = pickle.load(file)
-    return model
+# Load the model and data
+model = pickle.load(open('fight_model.pkl', 'rb'))
+fighter_details = pd.read_csv('File 3.csv')
 
-model = load_model()
-def prepare_input(fighter1, fighter2, df):
-    # Process and return the input features from dataframe for the model prediction
-    # Example placeholder
-    return np.array([0])  # Replace with actual feature extraction logic
+# Application Title
+st.title("UFC Fight Predictor")
 
-# Load datasets
-fighters_df = pd.read_csv('new_fight_detail_full.csv')
+# Fighter Selection
+fighter_names = sorted(fighter_details['Full Name'].dropna().unique())
+fighter1 = st.selectbox("Select Fighter 1", [''] + fighter_names)
+fighter2 = st.selectbox("Select Fighter 2", [''] + [f for f in fighter_names if f != fighter1])
 
-# Convert percentage columns if necessary
-# fighters_df['SomeColumn'] = fighters_df['SomeColumn'].str.rstrip('%').astype('float') / 100
+# Display Fighter Stats
+if fighter1:
+    st.write("Fighter 1 Stats", fighter_details[fighter_details['Full Name'] == fighter1])
+if fighter2:
+    st.write("Fighter 2 Stats", fighter_details[fighter_details['Full Name'] == fighter2])
 
-# Streamlit user interface
-st.title('UFC Fight Predictor')
+# Prediction Button
+if st.button("Predict Winner"):
+    if not fighter1 or not fighter2:
+        st.error("Please select both fighters.")
+    else:
+        # Assuming you have a function to process input features
+        input_features = process_features(fighter1, fighter2, fighter_details)
+        prediction = model.predict([input_features])
+        winner = "Fighter 1 Wins" if prediction == 1 else "Fighter 2 Wins"
+        st.success(winner)
 
-
-# Selecting fighters
-fighter1 = st.selectbox('Select Fighter 1', options=fighters_df['Fighter1'].unique())
-fighter2 = st.selectbox('Select Fighter 2', options=[f for f in fighters_df['Fighter2'].unique() if f != fighter1])
-
-# Show stats
-if st.button('Show Stats'):
-    st.write('Fighter 1 Stats:', fighters_df[fighters_df['Fighter1'] == fighter1])
-    st.write('Fighter 2 Stats:', fighters_df[fighters_df['Fighter2'] == fighter2])
-
-# Prediction
-if st.button('Predict Fight Outcome'):
-    # Assume function `prepare_input` processes the input features necessary for the model
-    input_features = prepare_input(fighter1, fighter2, fighters_df)
-    prediction = model.predict([input_features])[0]
-    winner = 'Fighter 1' if prediction == 1 else 'Fighter 2'
-    st.success(f'Predicted Winner: {winner}')
-
+def process_features(fighter1, fighter2, df):
+    # You need to replace this part with actual feature processing based on your model
+    # This is just a placeholder
+    features = []
+    return features
 
