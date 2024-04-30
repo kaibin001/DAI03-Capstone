@@ -4,7 +4,6 @@ import numpy as np
 import pickle
 import os
 from sklearn.preprocessing import LabelEncoder
-from sklearn.preprocessing import OneHotEncoder
 
 # Function to convert time string M:SS to total seconds
 def time_to_seconds(time_str):
@@ -28,7 +27,7 @@ try:
     fight_data['Time'] = fight_data['Time'].apply(time_to_seconds)
 
     # Apply one-hot encoding to categorical columns
-    fight_data = pd.get_dummies(fight_data, columns=['Weight Class', 'Winning Method'])
+    fight_data = pd.get_dummies(fight_data, columns=['Weight Class', 'Winning Method', 'Win/Loss (Fighter1)'])
 
 except Exception as e:
     st.error(f"Failed to load or prepare fight data: {str(e)}")
@@ -42,7 +41,6 @@ try:
     fight_data['Fighter2'] = encoder.transform(fight_data['Fighter2'])
 except Exception as e:
     st.error(f"Failed to encode fighter names: {str(e)}")
-
 # App title
 st.title('Fight Win Predictor')
 
