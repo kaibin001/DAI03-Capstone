@@ -23,7 +23,6 @@ def process_features(fighter1, fighter2):
     features_f1.reset_index(drop=True, inplace=True)
     features_f2.reset_index(drop=True, inplace=True)
     features = pd.concat([features_f1,features_f2], axis=1)
-    return features
     
     percentage_features = ['Win Rate (Fighter 1)', 'Str. Acc. (Fighter 1)', 'Str. Def (Fighter 1)', 
                        'TD Acc. (Fighter 1)', 'TD Def. (Fighter 1)', 'Win Rate (Fighter 2)', 
