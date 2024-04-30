@@ -3,9 +3,7 @@ import pandas as pd
 import numpy as np
 import pickle
 import os
-
-# Directory for data within the repository
-# data_dir = 'main'
+from sklearn.preprocessing import LabelEncoder
 
 # Load the trained model
 model_path = os.path.join('fight_model.pkl')
@@ -18,9 +16,10 @@ fight_data = pd.read_csv(fight_data_path)
 file_3_data_path = os.path.join('File 3.csv')
 fighter_names = pd.read_csv(file_3_data_path)
 
-# Convert all columns to string to avoid serialization issues
-fighter_names = fighter_names.astype(str)
-fight_data = fight_data.astype(str)
+# Encode categorical data
+label_encoder = LabelEncoder()
+fight_data['Fighter1'] = label_encoder.fit_transform(fight_data['Fighter1'])
+fight_data['Fighter2'] = label_encoder.transform(fight_data['Fighter2'])  # Using the same encoder for consistency
 
 # App title
 st.title('Fight Win Predictor')
@@ -35,11 +34,11 @@ filtered_fighters = fight_data[fight_data['Weight Class'] == selected_weight_cla
 # Fighter dropdowns
 col1, col2 = st.columns(2)
 with col1:
-    fighter1 = st.selectbox('Select Fighter 1', options=filtered_fighters, key='f1')
+    fighter1 = st.selectbox('Select Fighter 1', options=filtered_fighters, key='f1', format_func=lambda x: label_encoder.inverse_transform([x])[0])
     fighter1_stats = fight_data[fight_data['Fighter1'] == fighter1].iloc[0]
     st.write('Fighter 1 Stats:', fighter1_stats)
 with col2:
-    fighter2 = st.selectbox('Select Fighter 2', options=[f for f in filtered_fighters if f != fighter1], key='f2')
+    fighter2 = st.selectbox('Select Fighter 2', options=[f for f in filtered_fighters if f != fighter1], key='f2', format_func=lambda x: label_encoder.inverse_transform([x])[0])
     fighter2_stats = fight_data[fight_data['Fighter1'] == fighter2].iloc[0]
     st.write('Fighter 2 Stats:', fighter2_stats)
 
