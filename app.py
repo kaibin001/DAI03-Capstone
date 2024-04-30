@@ -42,7 +42,7 @@ with col1:
             st.write('Overall Stats',performance_stats_1)
 
 with col2:
-    fighter2 = st.selectbox('Select Fighter 2', options=['Please select a fighter'] + sorted(fighter_profile[fighter_names['Full Name'] != fighter1]['Full Name'].tolist()), key='f2')
+    fighter2 = st.selectbox('Select Fighter 2', options=['Please select a fighter'] + sorted(fighter_profile[fighter_profile['Full Name'] != fighter1]['Full Name'].tolist()), key='f2')
     if fighter2 != 'Please select a fighter':
         fighter2_stats = fighter_profile[fighter_profile['Full Name'] == fighter2].iloc[0]
         general_stats_2 = fighter2_stats[['Win Rate', 'Total Fight', 'Win', 'Lose', 'Draw', 'Height', 'Weight']]
