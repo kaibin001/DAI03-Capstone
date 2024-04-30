@@ -23,7 +23,8 @@ def process_features(fighter1, fighter2):
     features_f1.reset_index(drop=True, inplace=True)
     features_f2.reset_index(drop=True, inplace=True)
     features = pd.concat([features_f1,features_f2], axis=1)
-    st.write(features)
+    st.write(features_f1)
+    st.write(features_f2)
     return features
     
 # Application Title
