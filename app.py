@@ -3,8 +3,8 @@ import pandas as pd
 import pickle
 
 # Load the model and data
-model = pickle.load(open('fight_model3.pkl', 'rb'))
-fight_events = pd.read_csv('new_fight_detail_full.csv')
+model = pickle.load(open('fight_model4.pkl', 'rb'))
+fight_events = pd.read_csv('new_fight_detail_full2.csv')
 
 
 def process_features(fighter1, fighter2):
