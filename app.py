@@ -16,10 +16,16 @@ fight_data = pd.read_csv(fight_data_path)
 file_3_data_path = os.path.join('File 3.csv')
 fighter_names = pd.read_csv(file_3_data_path)
 
-# Encode categorical data
+# Create a LabelEncoder object
 label_encoder = LabelEncoder()
-fight_data['Fighter1'] = label_encoder.fit_transform(fight_data['Fighter1'])
-fight_data['Fighter2'] = label_encoder.transform(fight_data['Fighter2'])  # Using the same encoder for consistency
+
+# Combine all fighters into one series to fit the LabelEncoder
+all_fighters = pd.concat([fight_data['Fighter1'], fight_data['Fighter2']]).unique()
+label_encoder.fit(all_fighters)
+
+# Encode Fighter1 and Fighter2 columns
+fight_data['Fighter1'] = label_encoder.transform(fight_data['Fighter1'])
+fight_data['Fighter2'] = label_encoder.transform(fight_data['Fighter2'])
 
 # App title
 st.title('Fight Win Predictor')
