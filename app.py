@@ -44,7 +44,7 @@ with col2:
     if fighter2 != 'Please select a fighter':
         fighter2_stats = fighter_names[fighter_names['Full Name'] == fighter2].iloc[0]
         general_stats_2 = fighter2_stats[['Win Rate', 'Total Fight', 'Win', 'Lose', 'Draw', 'Height', 'Weight']]
-        performance_stats_2 = fighter2_stats[['SLpM', 'Str Acc', 'SApM', 'Str Def', 'TD Avg', 'TD Acc', 'TD Def', 'Sub. Avg']]
+        performance_stats_2 = fighter2_stats[['SLpM', 'Str Acc', 'SApM', 'Str Def', 'TD Avg', 'TD', 'TD Def', 'Sub. Avg']]
         
         # Split the stats into two side-by-side columns
         stat_col3, stat_col4 = st.columns(2)
