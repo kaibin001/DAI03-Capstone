@@ -10,19 +10,19 @@ model_path = os.path.join('fight_model.pkl')
 with open(model_path, 'rb') as file:
     model = pickle.load(file)
 
-# Load fight data
-fight_data_path = os.path.join('new_fight_detail_full.csv')
-fight_data = pd.read_csv(fight_data_path)
+# Assuming all prior data loading and processing (including encoding) are correctly done
+# Define the model features according to the actual features used in training
+model_features = [
+    'Round', 'Total Fights (Fighter 1)', 'Win (Fighter 1)', 'Lose (Fighter 1)', 'Draw (Fighter 1)',
+    'SLpM (Fighter 1)', 'Str. Acc. (Fighter 1)', 'SApM (Fighter 1)', 'Str. Def (Fighter 1)',
+    'TD Avg. (Fighter 1)', 'TD Acc. (Fighter 1)', 'TD Def. (Fighter 1)', 'Sub. Avg. (Fighter 1)',
+    'Total Fights (Fighter 2)', 'Win (Fighter 2)', 'Lose (Fighter 2)', 'Draw (Fighter 2)',
+    'SLpM (Fighter 2)', 'Str. Acc. (Fighter 2)', 'SApM (Fighter 2)', 'Str. Def (Fighter 2)',
+    'TD Avg. (Fighter 2)', 'TD Acc. (Fighter 2)', 'TD Def. (Fighter 2)', 'Sub. Avg. (Fighter 2)',
+    'Weight Class'  # Ensure this is properly encoded if used as a feature
+]
 
-# Initialize LabelEncoders for each categorical column
-categorical_columns = fight_data.select_dtypes(include=['object']).columns
-label_encoders = {col: LabelEncoder() for col in categorical_columns}
-
-# Fit and transform each categorical column with LabelEncoder
-for col, encoder in label_encoders.items():
-    fight_data[col] = encoder.fit_transform(fight_data[col])
-
-# App title
+# Streamlit UI code
 st.title('Fight Win Predictor')
 
 # Selecting a weight class (after encoding)
@@ -46,22 +46,9 @@ with col2:
     st.write('Fighter 2 Stats:', fighter2_stats)
 
 # Predict button
-# Predict button
 if st.button('Predict Outcome'):
     try:
-        # Ensure only the model's expected features are included
-        # Assuming 'model_features' is a list of the column names expected by the model
-        mmodel_features = [
-    'Round', 'Weight Class',  # Make sure 'Weight Class' is encoded
-    'Total Fights (Fighter 1)', 'Win (Fighter 1)', 'Lose (Fighter 1)', 'Draw (Fighter 1)',
-    'SLpM (Fighter 1)', 'Str. Acc. (Fighter 1)', 'SApM (Fighter 1)', 'Str. Def (Fighter 1)',
-    'TD Avg. (Fighter 1)', 'TD Acc. (Fighter 1)', 'TD Def. (Fighter 1)', 'Sub. Avg. (Fighter 1)',
-    'Total Fights (Fighter 2)', 'Win (Fighter 2)', 'Lose (Fighter 2)', 'Draw (Fighter 2)',
-    'SLpM (Fighter 2)', 'Str. Acc. (Fighter 2)', 'SApM (Fighter 2)', 'Str. Def (Fighter 2)',
-    'TD Avg. (Fighter 2)', 'TD Acc. (Fighter 2)', 'TD Def. (Fighter 2)', 'Sub. Avg. (Fighter 2)'
-]
-
-        # Prepare data for model prediction, filtering out all columns not in model_features
+        # Filter out to use only the required features
         fighter1_features = filtered_fight_data.loc[filtered_fight_data['Fighter1'] == fighter1, model_features].iloc[0].values
         fighter2_features = filtered_fight_data.loc[filtered_fight_data['Fighter2'] == fighter2, model_features].iloc[0].values
         input_data = np.array([np.concatenate((fighter1_features, fighter2_features))])
