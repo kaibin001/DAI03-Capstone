@@ -45,8 +45,17 @@ with col2:
 
 # Predict button
 if st.button('Predict Outcome'):
-    # Prepare data for prediction (adjust this according to your model's trained features)
-    input_data = np.array([fighter1_stats.values[:-1] + fighter2_stats.values[:-1]])  # Adjust as per actual feature requirements
-    prediction = model.predict(input_data)
-    win_status = 'Fighter 1 Wins' if prediction == 1 else 'Fighter 2 Wins'
-    st.success(f'Prediction: {win_status}')
+    try:
+        # Assuming fighter1_stats and fighter2_stats are pandas Series with the same structure
+        # Combine the relevant features from both fighters into a single array
+        # Ensure there are no missing values or handle them appropriately
+        fighter1_features = fighter1_stats.values[:-1]  # Adjust the slicing as per your data
+        fighter2_features = fighter2_stats.values[:-1]  # Adjust the slicing as per your data
+        input_data = np.array([np.concatenate((fighter1_features, fighter2_features))])
+
+        # Perform prediction
+        prediction = model.predict(input_data)
+        win_status = 'Fighter 1 Wins' if prediction == 1 else 'Fighter 2 Wins'
+        st.success(f'Prediction: {win_status}')
+    except Exception as e:
+        st.error(f"An error occurred: {str(e)}")
