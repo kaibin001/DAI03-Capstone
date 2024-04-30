@@ -6,7 +6,7 @@ from sklearn.preprocessing import StandardScaler
 
 # Load data and model
 home_directory = os.path.expanduser('~')
-data_path = os.path.join(home_directory, 'Downloads/Capstone/File 3.csv')
+data_path = os.path.join(home_directory, 'File 3.csv')
 model_path = os.path.join(home_directory, 'fight_model.pkl')
 
 fighters_data = pd.read_csv(data_path)
