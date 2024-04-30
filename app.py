@@ -46,12 +46,16 @@ with col2:
     st.write('Fighter 2 Stats:', fighter2_stats)
 
 # Predict button
+# Predict button
 if st.button('Predict Outcome'):
     try:
-        # Ensure there are no missing values or handle them appropriately
-        # Combine the relevant features from both fighters into a single array
-        fighter1_features = filtered_fight_data.loc[filtered_fight_data['Fighter1'] == fighter1].drop(['Fighter1', 'Fighter2'], axis=1).iloc[0].values
-        fighter2_features = filtered_fight_data.loc[filtered_fight_data['Fighter2'] == fighter2].drop(['Fighter1', 'Fighter2'], axis=1).iloc[0].values
+        # Ensure only the model's expected features are included
+        # Assuming 'model_features' is a list of the column names expected by the model
+        model_features = ['list', 'of', 'model', 'features']  # Update this list with actual model features
+
+        # Prepare data for model prediction, filtering out all columns not in model_features
+        fighter1_features = filtered_fight_data.loc[filtered_fight_data['Fighter1'] == fighter1, model_features].iloc[0].values
+        fighter2_features = filtered_fight_data.loc[filtered_fight_data['Fighter2'] == fighter2, model_features].iloc[0].values
         input_data = np.array([np.concatenate((fighter1_features, fighter2_features))])
 
         # Perform prediction
@@ -60,4 +64,5 @@ if st.button('Predict Outcome'):
         st.success(f'Prediction: {win_status}')
     except Exception as e:
         st.error(f"An error occurred: {str(e)}")
+
 
