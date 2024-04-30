@@ -18,13 +18,12 @@ st.title("UFC Fight Predictor")
 # Fighter Selection
 fighter_names = sorted(fighter_details['Full Name'].dropna().unique())
 fighter1 = st.selectbox("Select Fighter 1", [''] + fighter_names)
-fighter2 = st.selectbox("Select Fighter 2", [''] + [f for f in fighter_names if f != fighter1])
-
-# Display Fighter Stats
 if fighter1:
     st.write("Fighter 1 Stats", fighter_details[fighter_details['Full Name'] == fighter1])
+fighter2 = st.selectbox("Select Fighter 2", [''] + [f for f in fighter_names if f != fighter1])
 if fighter2:
     st.write("Fighter 2 Stats", fighter_details[fighter_details['Full Name'] == fighter2])
+
 
 # Prediction Button
 if st.button("Predict Winner"):
