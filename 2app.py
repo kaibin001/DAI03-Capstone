@@ -20,8 +20,8 @@ def prepare_input_data(fighter1, fighter2, fighter_data):
     # Let's assume your model needs numerical stats of the fighters as input
     
     # Example: Extract numeric stats for both fighters
-    f1_stats = fighter_data[fighter_profile['Full Name'] == fighter1].select_dtypes(include=[np.number])
-    f2_stats = fighter_data[fighter_profile['Full Name'] == fighter2].select_dtypes(include=[np.number])
+    f1_stats = fighter_profile[fighter_profile['Full Name'] == fighter1].select_dtypes(include=[np.number])
+    f2_stats = fighter_profile[fighter_profile['Full Name'] == fighter2].select_dtypes(include=[np.number])
     
     # Flatten the arrays and concatenate them
     if not f1_stats.empty and not f2_stats.empty:
