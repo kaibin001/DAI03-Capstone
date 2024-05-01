@@ -37,11 +37,14 @@ st.title("UFC Fight Predictor")
 # Fighter Selection
 fighter_names = sorted(fight_events['Fighter1'].dropna().unique())
 fighter1 = st.selectbox("Select Fighter 1", [''] + fighter_names)
+fighter1last5 = fight_events[fight_events['Fighter1'] == fighter1].head(5)
+fighter2last5 = fight_events[fight_events['Fighter2'] == fighter2].head(5)
+
 if fighter1:
-    st.write(f"{fighter1} Last 5 Fights", fight_events[fight_events['Fighter1'] == fighter1])
+    st.write(f"{fighter1} Last 5 Fights", fighter1last5)
 fighter2 = st.selectbox("Select Fighter 2", [''] + [f for f in fighter_names if f != fighter1])
 if fighter2:
-    st.write("{fighter2} Last 5 Fights", fight_events[fight_events['Fighter2'] == fighter2])
+    st.write("{fighter2} Last 5 Fights", fighter2last5)
 
 # Prediction Button
 if st.button("Predict Winner"):
