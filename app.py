@@ -38,25 +38,11 @@ st.title("UFC Fight Predictor")
 fighter_names = sorted(fight_events['Fighter1'].dropna().unique())
 fighter1 = st.selectbox("Select Fighter 1", [''] + fighter_names)
 if fighter1:
-    st.write("Fighter 1 Stats", fight_events[fight_events['Fighter1'] == fighter1])
+    st.write(f"{fighter1} Previous  5 Fights", fight_events[fight_events['Fighter1'][4] == fighter1])
 fighter2 = st.selectbox("Select Fighter 2", [''] + [f for f in fighter_names if f != fighter1])
 if fighter2:
-    st.write("Fighter 2 Stats", fight_events[fight_events['Fighter2'] == fighter2])
+    st.write("{fighter2} Previous 5 Fights", fight_events[fight_events['Fighter2'][4] == fighter2])
 
-
-# Prediction Button
-# if st.button("Predict Winner"):
-#     if not fighter1 or not fighter2:
-#         st.error("Please select both fighters.")
-#     else:
-#         # Assuming you have a function to process input features
-#         input_features = process_features(fighter1, fighter2)
-#         st.write(fighter1)
-#         st.write(fighter2)
-#         st.write(input_features)
-#         prediction = model.predict([input_features])
-#         winner = "Fighter 1 Wins" if prediction == 1 else "Fighter 2 Wins"
-#         st.success(winner)
 # Prediction Button
 if st.button("Predict Winner"):
     if not fighter1 or not fighter2:
@@ -72,6 +58,6 @@ if st.button("Predict Winner"):
         
         st.write(fighter1, " VS ", fighter2, input_features)
         prediction = model.predict(input_features)  # Make sure input_features is correctly shaped
-        winner = f"Prediction: Fighter 1, {fighter1} Wins" if prediction == 1 else f"Prediction: Fighter 2, {fighter2}  Wins"
+        winner = f"Prediction: Fighter 1, {fighter1} Wins!" if prediction == 1 else f"Prediction: Fighter 2, {fighter2}  Wins!"
         st.success(winner)
 
