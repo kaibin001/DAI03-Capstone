@@ -4,7 +4,7 @@ import pickle
 
 # Load the model and data
 model = pickle.load(open('fight_model4.pkl', 'rb'))
-fight_events = pd.read_csv('new_fight_detail_full2.csv')
+fight_events = pd.read_csv('new_fight_detail_full.csv')
 
 
 def process_features(fighter1, fighter2):
@@ -64,14 +64,14 @@ if st.button("Predict Winner"):
     else:
         # Assuming you have a function to process input features
         input_features = process_features(fighter1, fighter2)
-        st.write("Shape of the input features:", input_features.shape)  # Check the shape
+        # st.write("Shape of the input features:", input_features.shape)  # Check the shape
         
         # Ensure input_features is two-dimensional
         if len(input_features.shape) == 3 and input_features.shape[0] == 1:
             input_features = input_features.reshape(1, -1)
         
-        st.write(fighter1, fighter2, input_features)
+        st.write(fighter1, " VS ", fighter2, input_features)
         prediction = model.predict(input_features)  # Make sure input_features is correctly shaped
-        winner = "Fighter 1 Wins" if prediction == 1 else "Fighter 2 Wins"
+        winner = f"Fighter 1,{fighter1} Wins" if prediction == 1 else f"Fighter 2,{fighter2}  Wins"
         st.success(winner)
 
