@@ -3,9 +3,9 @@ import pandas as pd
 import pickle
 
 # Load the model and data
-model = pickle.load(open('latest_model.pkl'))
-# with open('latest_model.pkl', 'rb') as file:
-#     model = pickle.load(file)
+model_path = 'latest_model.pkl'
+with open(model_path, 'rb') as file:
+    model = pickle.load(file)
 fight_events = pd.read_csv('new_fight_detail_full.csv')
 
 
