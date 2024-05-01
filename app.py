@@ -34,6 +34,7 @@ def process_features(fighter1, fighter2):
 # Application Title
 st.title("UFC Fight Predictor")
 
+st.write(predicted)
 # Fighter Selection
 fighter_names = sorted(fight_events['Fighter1'].dropna().unique())
 fighter1 = st.selectbox("Select Fighter 1", [''] + fighter_names)
@@ -70,8 +71,8 @@ if st.button("Predict Winner"):
         if len(input_features.shape) == 3 and input_features.shape[0] == 1:
             input_features = input_features.reshape(1, -1)
         
-        st.write(fighter1, " VS ", fighter2, input_features)
+        predicted = st.write(fighter1, " VS ", fighter2, input_features)
         prediction = model.predict(input_features)  # Make sure input_features is correctly shaped
-        winner = f"Prediction: Fighter 1, {fighter1} Wins" if prediction == 1 else f"Prediction: Fighter 2, {fighter2}  Wins"
+        winner = f"Prediction:/n Fighter 1, {fighter1} Wins" if prediction == 1 else f"Prediction:/n Fighter 2, {fighter2}  Wins"
         st.success(winner)
 
