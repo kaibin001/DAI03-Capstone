@@ -72,6 +72,6 @@ if st.button("Predict Winner"):
         
         st.write(fighter1, " VS ", fighter2, input_features)
         prediction = model.predict(input_features)  # Make sure input_features is correctly shaped
-        winner = f"Prediction:{/n} Fighter 1, {fighter1} Wins" if prediction == 1 else f"Prediction:{/n} Fighter 2, {fighter2}  Wins"
+        winner = f"Prediction: Fighter 1, {fighter1} Wins" if prediction == 1 else f"Prediction: Fighter 2, {fighter2}  Wins"
         st.success(winner)
 
